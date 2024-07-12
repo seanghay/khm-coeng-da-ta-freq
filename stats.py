@@ -13,9 +13,10 @@ _coeng_ta_words = {}
 
 with open("khmerdictionary.csv") as infile:
   reader = csv.DictReader(infile)
-  for item in reader:
-    text = item["word"].replace("\u200b", "")
+  words = [item["word"].replace("\u200b", "") for item in reader]
+  words = sorted(set(words))
 
+  for text in words:
     coeng_da_result = [m[1] for m in _coeng_da_pattern.finditer(text)]
     if len(coeng_da_result) > 0:
       for ch in coeng_da_result:
@@ -52,7 +53,7 @@ _coeng_ta_words = {}
 
 with open("khmerlbdict.tsv") as infile:
   reader = csv.reader(infile)
-  words = list(set([item[0].strip() for item in reader if len(item) > 0]))
+  words = sorted(set([item[0].strip() for item in reader if len(item) > 0]))
 
   for text in words:
     coeng_da_result = [m[1] for m in _coeng_da_pattern.finditer(text)]
