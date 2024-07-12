@@ -1,0 +1,3 @@
+[submodule "khmerlbdict"]
+	path = khmerlbdict
+	url = https://github.com/silnrsi/khmerlbdict.git
