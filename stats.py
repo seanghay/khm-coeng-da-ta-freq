@@ -1,9 +1,10 @@
 import os
 import regex as re
 import csv
-from khnormal import khnormal
-from khmernormalizer import normalize
+from khmersegment import Segmenter
 
+
+_segmenter = Segmenter("-m km-5tag-seg-model.bin")
 _coeng_da_pattern = re.compile(r"([\u1780-\u17a2])\u17d2ដ")
 _coeng_ta_pattern = re.compile(r"([\u1780-\u17a2])\u17d2ត")
 
@@ -37,14 +38,13 @@ for k, v in _coeng_da_words.items():
   filename = f"KHDICT2022_COENG_DA_{k}.tsv"
   with open(os.path.join("result", filename), "w") as outfile:
     writer = csv.writer(outfile, delimiter="\t")
-    writer.writerows([[w, "・".join(w)] for w in v])
+    writer.writerows([[w, "|".join(_segmenter(w, deep=True)), "・".join(w)] for w in v])
 
 for k, v in _coeng_ta_words.items():
   filename = f"KHDICT2022_COENG_TA_{k}.tsv"
   with open(os.path.join("result", filename), "w") as outfile:
     writer = csv.writer(outfile, delimiter="\t")
-    writer.writerows([[w, "・".join(w)] for w in v])
-
+    writer.writerows([[w, "|".join(_segmenter(w, deep=True)), "・".join(w)] for w in v])
 
 # ---
 _coeng_da_words = {}
@@ -77,10 +77,14 @@ for k, v in _coeng_da_words.items():
   filename = f"KHLBDICT_COENG_DA_{k}.tsv"
   with open(os.path.join("result", filename), "w") as outfile:
     writer = csv.writer(outfile, delimiter="\t")
-    writer.writerows([[w, "・".join(w)] for w in v])
+    writer.writerows(
+      [[w, "|".join(_segmenter(w, deep=True)), "・".join(w)] for w in v]
+    )
 
 for k, v in _coeng_ta_words.items():
   filename = f"KHLBDICT_COENG_TA_{k}.tsv"
   with open(os.path.join("result", filename), "w") as outfile:
     writer = csv.writer(outfile, delimiter="\t")
-    writer.writerows([[w, "・".join(w)] for w in v])
+    writer.writerows(
+      [[w, "|".join(_segmenter(w, deep=True)), "・".join(w)] for w in v]
+    )
